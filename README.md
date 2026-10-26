@@ -30,8 +30,9 @@ php/
 │   ├── home.php               the "different page"
 │   ├── logout.php             forget the user
 │   ├── index.php              so opening the folder shows the login page
-│   ├── style.css              90 lines of styling only
-│   └── README.md              the short explanation
+│   ├── style.css              93 lines of styling only
+│   ├── README.md              the short explanation
+│   └── TEACHING-GUIDE.md      how to teach it: line by line, demo script, viva Q&A
 └── login-app/                 ← the professional version
     ├── index.php              login form + validation + error messages
     ├── dashboard.php          the "different page" after a successful login
@@ -70,12 +71,14 @@ php -S localhost:8000 router.php
 Log in with **admin / admin123** or **student / student123**.
 
 On XAMPP/WAMP/LAMP copy either folder into `htdocs` and open
-`http://localhost/simple/login.php` or `http://localhost/login-app/`.
+`http://localhost/simple/` or `http://localhost/login-app/`.
 
 ## Start here if you are teaching
 
-1. Read [`simple/README.md`](simple/README.md) — four concepts, five lines of code,
-   and five things to try in class.
+1. Read [`simple/README.md`](simple/README.md) — the 30-second overview — then
+   [`simple/TEACHING-GUIDE.md`](simple/TEACHING-GUIDE.md): every line explained in
+   teaching order, four PHP concepts, a 20-minute demo script, the mistakes
+   beginners actually make, 12 viva questions and graded homework.
 2. Read [`login-app/TEACHING-GUIDE.md`](login-app/TEACHING-GUIDE.md) — every line of
    the full version, the exact request/response traffic of a login, the security
    decisions, the HTTP error answer, a 30-minute demo script and viva questions.
