@@ -579,9 +579,11 @@ By default until the browser is closed, or until PHP's garbage collector cleans
   test a guess.
 * MD5/SHA-1/SHA-256 are *fast*, which is exactly wrong for passwords — a GPU
   tests billions per second.
-* `password_hash(PASSWORD_DEFAULT)` currently means **bcrypt with cost 12**.
-  The cost makes each attempt ~100 ms — invisible to one login, crippling to a
-  brute-force attack.
+* `password_hash(PASSWORD_DEFAULT)` currently means **bcrypt**, with a cost
+  factor (the `12` in `$2y$12$...`). The cost makes each attempt take ~100 ms —
+  invisible for one login, crippling for a brute-force attack. Raise the cost as
+  hardware gets faster; older hashes keep verifying and `password_needs_rehash()`
+  tells you when to upgrade one.
 * When a better algorithm becomes the default, PHP versions of the hash still
   verify correctly, and `password_needs_rehash()` lets you upgrade on the next
   login.
