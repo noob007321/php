@@ -3,8 +3,8 @@
 Five small files. Read them top to bottom and you have read the whole program.
 
 > **Teaching it?** Read [`TEACHING-GUIDE.md`](TEACHING-GUIDE.md) — every line
-> explained in teaching order, plus a demo script, common beginner errors and
-> viva questions.
+> explained in teaching order, a line-numbered walkthrough you can project
+> (§16), a demo script, common beginner errors and viva questions.
 
 | File | Lines | Job |
 |---|---|---|

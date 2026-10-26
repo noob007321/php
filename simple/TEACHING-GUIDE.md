@@ -21,6 +21,7 @@ in the order you would say it out loud.
 13. [Homework](#13-homework)
 14. [Question 2: HTTP request error vs response error](#14-question-2-http-request-error-vs-response-error)
 15. [What this version leaves out — and where it is](#15-what-this-version-leaves-out--and-where-it-is)
+16. [The complete files, with line numbers](#16-the-complete-files-with-line-numbers)
 
 ---
 
@@ -644,6 +645,143 @@ Suggested line to close the lesson:
 > redirect, and a message drawn under the form — is the skeleton of every login
 > page in the world. The full version in `login-app` is the same skeleton with
 > armour on."
+
+---
+
+## 16. The complete files, with line numbers
+
+Project the file, keep this page open, and point. Every number below is the real
+line number in the file, so you can say *"look at line 30"* and the whole class
+looks at the same place.
+
+### 16.1 `login.php` — the whole file (71 lines)
+
+```php
+ 1 | <?php
+ 2 | /* =========================================================================
+ 3 |    login.php  —  THE SIMPLE VERSION
+ 4 |    -------------------------------------------------------------------------
+ 5 |    Log in with:   admin / 1234        student / abc
+ 6 |    This one file does 3 things, in this order:
+ 7 | 
+ 8 |        1. LOOK   — did the form arrive? read the ID and password
+ 9 |        2. CHECK  — are they correct?  yes -> home.php   no -> $error
+10 |        3. SHOW   — print the form, then the error under it
+11 |    ========================================================================= */
+12 | 
+13 | session_start();        // needed so we can remember the user later
+14 | 
+15 | // The "database". A real app would use MySQL; for learning an array is enough.
+16 | $users = [
+17 |     'admin'   => '1234',
+18 |     'student' => 'abc',
+19 | ];
+20 | 
+21 | $error = '';            // empty = no problem (yet)
+22 | 
+23 | // ---- 1. LOOK ------------------------------------------------------------
+24 | if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+25 | 
+26 |     $id = $_POST['login_id'] ?? '';     // what the user typed
+27 |     $pw = $_POST['password'] ?? '';
+28 | 
+29 |     // ---- 2. CHECK -------------------------------------------------------
+30 |     if (isset($users[$id]) && $users[$id] === $pw) {
+31 | 
+32 |         $_SESSION['login_id'] = $id;    // remember this user
+33 |         header('Location: home.php');   // send them to the other page
+34 |         exit;                           // stop this page
+35 | 
+36 |     } else {
+37 |         $error = 'Invalid login ID or password.';
+38 |     }
+39 | }
+40 | ?>
+41 | <!DOCTYPE html>
+42 | <html>
+43 | <head>
+44 |     <title>Login</title>
+45 |     <link rel="stylesheet" href="style.css">
+46 | </head>
+47 | <body>
+48 |     <div class="box">
+49 | 
+50 |         <h1>Login</h1>
+51 | 
+52 |         <!-- ---- 3. SHOW ------------------------------------------------- -->
+53 |         <form method="post">
+54 |             <label>Login ID</label>
+55 |             <input type="text" name="login_id" value="<?= htmlspecialchars($id ?? '') ?>">
+56 | 
+57 |             <label>Password</label>
+58 |             <input type="password" name="password">
+59 | 
+60 |             <button type="submit">Log in</button>
+61 |         </form>
+62 | 
+63 |         <?php if ($error !== ''): ?>
+64 |             <!-- the error message appears BELOW the form -->
+65 |             <p class="error"><?= htmlspecialchars($error) ?></p>
+66 |         <?php endif; ?>
+67 | 
+68 |         <p class="hint">Try: admin / 1234 or student / abc</p>
+69 |     </div>
+70 | </body>
+71 | </html>
+```
+
+**Lines worth pointing at**
+
+| Line | Code | Say this |
+|---|---|---|
+| 13 | `session_start();` | "Start the server's memory for this visitor. Delete this line and nobody can stay logged in." |
+| 16 | `$users = [` | "This array is standing in for a MySQL table. Two users, two passwords." |
+| 21 | `$error = '';` | "Empty message = nothing is wrong yet. The page will ask about this variable at line 63." |
+| 24 | `if ($_SERVER['REQUEST_METHOD'] === 'POST') {` | "GET means the page was opened; POST means the button was clicked. This line is the fork between the two." |
+| 26 | `$id = $_POST['login_id'] ?? '';` | "Read what was typed. `?? ''` prevents a warning if the field was removed from the form." |
+| 30 | `if (isset($users[$id]) && $users[$id] === $pw) {` | "Does this login ID exist **and** is the password exactly equal? `isset` first, so an unknown ID cannot cause a warning." |
+| 32 | `$_SESSION['login_id'] = $id;` | "Remember **who** logged in. The browser never sees this value." |
+| 33 | `header('Location: home.php');` | "Tell the browser: don't show this page, request `home.php` instead. That is the 302." |
+| 34 | `exit;` | "Stop here. Without this line PHP keeps printing the form after the redirect." |
+| 37 | `$error = 'Invalid login ID or password.';` | "The only thing failure does: write a message. No redirect — we stay on this page." |
+| 39 | `}` | "End of the POST block. Notice what is missing: no `header()`, no `exit`. On failure the file simply continues into the HTML below." |
+| 53 | `<form method="post">` | "POST, because the password must not appear in the URL. No `action`, so the form submits to this same file." |
+| 55 | `value="<?= htmlspecialchars($id ?? '') ?>"` | "Put the typed login ID back, safely escaped. That is why the ID is still there after a wrong password." |
+| 63 | `<?php if ($error !== ''): ?>` | "Nothing is shown on the first visit, because `$error` is empty." |
+| 65 | `<p class="error"><?= htmlspecialchars($error) ?></p>` | "The requirement of the assignment: the message appears **below** the login form." |
+
+Read the count first: **71 lines, and only about 20 of them are PHP logic.**
+The rest is the HTML form and the comments you are reading now.
+
+### 16.2 `home.php` — the protected page (36 lines)
+
+The PHP part is lines 1–17; everything after that is presentation. The full code
+is quoted in [section 5](#5-homephp--the-lock-on-the-door).
+
+| Line | Code | Say this |
+|---|---|---|
+| 9 | `session_start();` | "Every page that uses `$_SESSION` must start the session first. Forget this and the user is always logged out." |
+| 11 | `if (!isset($_SESSION['login_id'])) {` | "The lock on the door: is there a logged-in user in the session?" |
+| 12 | `header('Location: login.php');` | "No session → straight back to the login page. This runs before any HTML, so a stranger never sees this page's content." |
+| 13 | `exit;` | "Stop. Nothing below this line is executed for a stranger." |
+| 16 | `$id = $_SESSION['login_id'];` | "Now we know who it is. The value came from `login.php` line 32." |
+| 27 | `<h1>Welcome, <?= htmlspecialchars($id) ?>!</h1>` | "Escape before printing — the name came from user input, so it could contain HTML." |
+
+### 16.3 `logout.php` (10 lines)
+
+| Line | Code | Say this |
+|---|---|---|
+| 6 | `session_start();` | "Open the session — you cannot destroy what you have not opened." |
+| 7 | `session_destroy();` | "Delete the session data on the server. The cookie in the browser now points at nothing." |
+| 9 | `header('Location: login.php');` | "This file prints no HTML at all — it changes state and redirects." |
+| 10 | `exit;` | "Same rule as everywhere else: redirect, then exit." |
+
+### 16.4 `index.php` (5 lines)
+
+| Line | Code | Say this |
+|---|---|---|
+| 4 | `header('Location: login.php');` | "So `http://localhost:8000/` works. A web server serves `index.php` by default when you ask for a folder." |
+| 5 | `exit;` | "Five lines, one job." |
 
 ---
 
