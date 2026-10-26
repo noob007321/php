@@ -2,18 +2,13 @@
 
 Five small files. Read them top to bottom and you have read the whole program.
 
-> **Teaching it?** Read [`TEACHING-GUIDE.md`](TEACHING-GUIDE.md) — every line
-> explained in teaching order, a line-numbered walkthrough you can project
-> (§16), a demo script, common beginner errors and viva questions.
-
 | File | Lines | Job |
 |---|---|---|
-| `login.php` | 71 | show the form, check the password, show the error |
-| `home.php` | 36 | the "different page" — only for logged-in users |
-| `logout.php` | 10 | forget the user |
+| `login.php` | ~70 | show the form, check the password, show the error |
+| `home.php` | ~35 | the "different page" — only for logged-in users |
+| `logout.php` | 8 | forget the user |
 | `index.php` | 5 | so opening the folder shows the login page |
-| `style.css` | 93 | colours and spacing only (no PHP) |
-| `TEACHING-GUIDE.md` | — | how to explain all of it (for the teacher) |
+| `style.css` | 90 | colours and spacing only (no PHP) |
 
 **Log in with:** `admin / 1234` or `student / abc`
 
@@ -52,17 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {   // 2. was the form sent?
 4. **`htmlspecialchars()`** — makes text safe before printing it, so a user
    cannot type HTML/JavaScript into your page.
 
-## Things this version leaves out on purpose
+## Two things this version leaves out on purpose
 
 * **The password is in plain text** (`'admin' => '1234'`). It is easy to read, so
   it is also easy to steal. Real apps store `password_hash()` values and check
   them with `password_verify()` — see `../login-app`.
-* **No CSRF token, no session ID regeneration, no cookie deletion on logout.**
-  All of that is in `../login-app`, which is the same application with a
-  professional structure.
-
-`TEACHING-GUIDE.md` section 15 lists each omission next to the file that fixes it,
-so the simple version becomes a stepping stone rather than a bad habit.
+* **No CSRF token, no escaping helper, no hashing.** All of that is in
+  `../login-app`, which is the same application with a professional structure.
 
 ## Try this in class
 
@@ -74,7 +65,3 @@ so the simple version becomes a stepping stone rather than a bad habit.
 4. Delete the cookie and press F5 on `home.php` → same thing. The cookie was
    the only proof that you had logged in.
 5. Change `'admin' => '1234'` to `'admin' => '4321'` and try the old password.
-6. Submit the form with a wrong password and look at DevTools → Network: the
-   response is `200`, not a redirect. Then log in correctly and watch the `302`.
-
-More exercises, with answers, are in [`TEACHING-GUIDE.md`](TEACHING-GUIDE.md).
